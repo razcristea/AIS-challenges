@@ -83,9 +83,8 @@ _Voila!_
 
  - By checking the stored cookies, we see for `admin_sess_id` the following value: `flag_should_be_here%20%F0%9F%A4%94`
  - `%20%F0%9F%A4%94` is this emoticon: 🤔
-
  - Let's test the input for URL with a basic XSS payload: 
- `<img src="http://url.to.file.which/not.exist" onerror=alert(document.cookie);>`
+ `<img src="http://url.to.file.which/not.exist" onerror=alert(document.cookie);>` and click **Submit**
  - TA-DA! Here's our flag...I mean...
 
 _Voila!_
