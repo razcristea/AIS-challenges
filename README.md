@@ -1,6 +1,8 @@
 # AIS-challenges - C4n y0u H4ck 1t ?
 AIS Hacking Challenge Site workarounds
 
+I currently have **980** points.
+
 ## { Client Side Protections }
 
 ### [Super Admin] (10 points)
@@ -73,9 +75,9 @@ _Voila!_
 
 ### [SQL Login] (50 Points)
 
- - We are facing a basic login form, so we test by entering '
- - An error message will pop: `'SELECT username, password FROM users WHERE username='admin' AND password='''' - unrecognized token: "'''"`
- - Easy peasy! Just enter this: `' or '1'='1`
+ - We are facing a basic login form, so we test by entering `'`;
+ - An error message will pop: `'SELECT username, password FROM users WHERE username='admin' AND password='''' - unrecognized token: "'''"`;
+ - Easy peasy! Just enter this: `' or '1'='1`.
  
 _Voila!_
 
@@ -88,3 +90,88 @@ _Voila!_
  - TA-DA! Here's our flag...I mean...
 
 _Voila!_
+
+### [SQL Credit Cards] (100 Points)
+ - As usual, test form by entering `'`;
+ - An error message will pop:`'SELECT username FROM credit_cards WHERE username=''' COLLATE NOCASE' - unrecognized token: "''' COLLATE NOCASE"`;
+ - So we have to forge the query. Try to enter this: `  ' and FALSE union SELECT card FROM credit_cards WHERE username='xxxxxx  `
+ - Card number will be displayed in page: `XXXXXXXXXXXXXXXXX`
+ 
+_Voila!_
+
+
+## { Crypto } 
+
+### [Encoded] (25 points)
+
+```python
+import codecs
+import bz2
+import textwrap
+```
+
+- We receive a string that is base64 encoded, so the first step is to decode it; `codecs.decode(STRING, 'base64')`
+- Looking at the result we see the first characters different from the rest: `BZh91AY&SY`; 
+- This is a sign that we are dealing with a bz2 encoded string;
+- So we decompress it, and... we get a long binary sequence; `bz2.decompress(RESULT)`
+- We split it `DECOMPRESSED.split()`, and transform each sequence into an int (base 2) and get the corresponding character;
+```python
+ANOTHER_RESULT = []
+for item in SPLITTED:
+    ANOTHER_RESULT(chr(int(item,2)))
+```
+- We join all the characters `''.join(ANOTHER_RESULT)` and... we are facing a hexadecimal sequence;
+- So we split the sequence into pairs of 2 `textwrap.wrap(HEX_SEQUENCE, 2)`, we transform each pair into an int (base 16), and into a character;
+- And we join the string: `flag{XXXXXXXXXXXX}`
+```python
+print (''.join( chr(int(a, 16) ) for a in SPLITTED_HEX_SEQUENCE))
+```
+_Voila!_
+
+### [Base64] (75 points)
+ - This time, we receive a larger string sequence.
+ - I inspected the content in Burp, under Decode tab - playing with different encodings - , and I saw a mention at the end of the file: `Did you know docx files are basically just zip files?` and some filenames (`flag.txt`, `xor_key.txt` and other xml files); 
+ - So we might be dealing with a file. Let's create one. Or better make it two!
+ - If using terminal, type: `touch raw out` - this will create two empty files: `raw` and `out`
+ - Put the content inside the raw file, and using python, import base64 package and let's decode the content:
+ ```python
+>>> import base64
+>>> input = open('raw', 'rb')
+>>> output = open('out', 'wb')
+>>> base64.decode(input, output)
+>>> input.close()
+>>> output.close()
+```
+- Now, it's time to play with `out` file; 
+- Out of curiosity, I opened `out` file as a docx file: `NOTHING TO SEE HERE MOVE ALONG` it said.\
+- Indeed, nothing to see, so I changed the file extension to zip and extracted it.
+- Inside the folder created, there are a bunch of files but only two are interesting: `flag.txt` and `xor_key.txt`, both containing some long strings;
+- Filenames are self explanatory, so our next step is to decrypt flag sequence using XOR key. But how?
+- XOR Decryption is identical to encryption because the XOR operation is symmetrical;
+- So all we need to do is to XOR encrypt the flag using the XOR key provided;
+- We can do that using python:
+```python
+import textwrap
+
+key = 'OUR_LONG_SEQUENCE_OF_CHARACTERS_FROM_XOR_KEY_DOT_TXT'
+flag = 'OUR_EVEN_LONGER_SEQUENCE_OF_CHARACTERS_FROM_OUR_FILE_NAMED_FLAG_DOT_TXT'
+# we split the flag sequence into 2pairs, because hex
+flag_list = textwrap.wrap(flag,2)
+# and the key sequence into characters
+key_list = textwrap.wrap(key,1)
+# using XOR magic and base 16 conversion of hex into int combined with ASCII magic from int into char, and
+# by the power of join
+print (''.join( chr(int(a, 16) ^ ord(b) ) for a, b in zip(flag_list, key_list) ))
+# we get the flag:flag{XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
+```
+- PS - Beware, it's an ugly one!
+
+_Voila!_
+
+
+### [Enigma] (100 points) [----WORKING ON----]
+ - Currently working on it!
+
+### [XOR] (300 points)
+ - Completed, but ain't gonna post it!
+ - You have to score 720 points in order to submit your e-mail address! _:)_
