@@ -111,14 +111,14 @@ import textwrap
 ```
 
 - We receive a string that is base64 encoded, so the first step is to decode it; `codecs.decode(STRING, 'base64')`
-- Looking at the result we see the first characters different from the rest: `BZh91AY&SY`; 
+- Looking at the result we see the first characters are different from the rest: `BZh91AY&SY`; 
 - This is a sign that we are dealing with a bz2 encoded string;
 - So we decompress it, and... we get a long binary sequence; `bz2.decompress(RESULT)`
 - We split it `DECOMPRESSED.split()`, and transform each sequence into an int (base 2) and get the corresponding character;
 ```python
 ANOTHER_RESULT = []
 for item in SPLITTED:
-    ANOTHER_RESULT(chr(int(item,2)))
+    ANOTHER_RESULT.push(chr(int(item,2)))
 ```
 - We join all the characters `''.join(ANOTHER_RESULT)` and... we are facing a hexadecimal sequence;
 - So we split the sequence into pairs of 2 `textwrap.wrap(HEX_SEQUENCE, 2)`, we transform each pair into an int (base 16), and into a character;
