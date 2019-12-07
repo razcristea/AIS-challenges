@@ -118,7 +118,7 @@ import textwrap
 ```python
 ANOTHER_RESULT = []
 for item in SPLITTED:
-    ANOTHER_RESULT.push(chr(int(item,2)))
+    ANOTHER_RESULT.append(chr(int(item,2)))
 ```
 - We join all the characters `''.join(ANOTHER_RESULT)` and... we are facing a hexadecimal sequence;
 - So we split the sequence into pairs of 2 `textwrap.wrap(HEX_SEQUENCE, 2)`, we transform each pair into an int (base 16), and into a character;
