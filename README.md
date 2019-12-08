@@ -1,7 +1,7 @@
 # AIS-challenges - C4n y0u H4ck 1t ?
 AIS Hacking Challenge Site workarounds
 
-I currently have **980** points.
+I currently have **1055** points.
 
 ## { Client Side Protections }
 
@@ -175,3 +175,9 @@ _Voila!_
 ### [XOR] (300 points)
  - Completed, but ain't gonna post it!
  - You have to score 720 points in order to submit your e-mail address! _:)_
+ 
+ ## { Exploitation } 
+ 
+ ### [Stack Overflow] (75 points)
+  - Completed, the code is self explanatory. Hints: buffer overflow, arc injection, and most important: ASCII !
+ 
