@@ -1,5 +1,5 @@
 # AIS-challenges - C4n y0u H4ck 1t ?
-AIS Hacking Challenge Site workarounds
+[AIS Hacking Challenge](https://hack.ainfosec.com) Site workarounds
 
 I currently have **1055** points.
 
